@@ -8,6 +8,7 @@ package amqp
 import (
 	"bufio"
 	"crypto/tls"
+	"fmt"
 	"io"
 	"net"
 	"reflect"
@@ -210,7 +211,7 @@ func DialConfig(url string, config Config) (*Connection, error) {
 
 		conn = client
 	}
-
+	fmt.Println("DialConfig !!!!!!!!!!!!")
 	return Open(conn, config)
 }
 
@@ -231,6 +232,7 @@ func Open(conn io.ReadWriteCloser, config Config) (*Connection, error) {
 		deadlines: make(chan readDeadliner, 1),
 	}
 	go c.reader(conn)
+	fmt.Println("Open !!!!!!!!!!!!")
 	return c, c.open(config)
 }
 
@@ -542,6 +544,7 @@ func (c *Connection) reader(r io.Reader) {
 // jitter tolerance of 1s
 func (c *Connection) heartbeater(interval time.Duration, done chan *Error) {
 	const maxServerHeartbeatsInFlight = 3
+	fmt.Println("heartbeater !!!!!!!!!!!!")
 
 	var sendTicks <-chan time.Time
 	if interval > 0 {
@@ -704,7 +707,7 @@ func (c *Connection) open(config Config) error {
 	if err := c.send(&protocolHeader{}); err != nil {
 		return err
 	}
-
+	fmt.Println("open !!!!!!!!!!!!")
 	return c.openStart(config)
 }
 
@@ -732,7 +735,7 @@ func (c *Connection) openStart(config Config) error {
 
 	// Set the connection locale to client locale
 	c.Config.Locale = config.Locale
-
+	fmt.Println("openStart !!!!!!!!!!!!")
 	return c.openTune(config, auth)
 }
 
@@ -784,6 +787,7 @@ func (c *Connection) openTune(config Config, auth Authentication) error {
 
 	// "The client should start sending heartbeats after receiving a
 	// Connection.Tune method"
+	fmt.Println("openTune !!!!!!!!!!!!")
 	go c.heartbeater(c.Config.Heartbeat, c.NotifyClose(make(chan *Error, 1)))
 
 	if err := c.send(&methodFrame{
