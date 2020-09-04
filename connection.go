@@ -139,6 +139,7 @@ func DefaultDial(connectionTimeout time.Duration) func(network, addr string) (ne
 // Dial uses the zero value of tls.Config when it encounters an amqps://
 // scheme.  It is equivalent to calling DialTLS(amqp, nil).
 func Dial(url string) (*Connection, error) {
+	fmt.Println("Dial !!!!!!!!!!!!")
 	return DialConfig(url, Config{
 		Heartbeat: defaultHeartbeat,
 		Locale:    defaultLocale,
@@ -151,6 +152,7 @@ func Dial(url string) (*Connection, error) {
 //
 // DialTLS uses the provided tls.Config when encountering an amqps:// scheme.
 func DialTLS(url string, amqps *tls.Config) (*Connection, error) {
+	fmt.Println("DialTLS !!!!!!!!!!!!")
 	return DialConfig(url, Config{
 		Heartbeat:       defaultHeartbeat,
 		TLSClientConfig: amqps,
